@@ -1,10 +1,46 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export function Button({color, size, width, value, valuePlaceholder}) {
+const containerStyles = variants({
+    variants: {
+        color: {
+            light: 'bg-white text-black'
+        },
+        value: {
+            true: 'opacity-100',
+            false: 'opacity-50'
+        },
+        width: {
+            regular: 'regular',
+            full: 'w-full'
+        }
+    },
+    defaultVariants: {
+        width: 'full',
+    },
+});
+
+const textStyles = variants({
+    variants: {
+        size: {
+            small: 'h-10 text-md leading-[4rem]',
+            medium: 'h-11 text-[1.6rem] leading-[4.4rem]',
+            large: 'h-12 text-lg leading-[4.8rem]'
+        }},
+    defaultVariants: {
+        size: 'large',
+    },
+});
+
+export function Button(props) {
+    const {value, valuePlaceholder} = props;
     return (
-        <button className={`inline-block rounded font-sans font-medium ${(width === 'regular') || 'w-full' } ${value ? 'opacity-100' : 'opacity-50' } ${(color === 'light') ? 'bg-white text-black' : 'bg-green text-white'} `} value={value} placeholder={valuePlaceholder}>
-            <span className={`block px-5 ${(size === 'small' ? 'h-10 text-md leading-[4rem]' : (size === 'medium' ? 'h-11 text-[1.6rem] leading-[4.4rem]' : 'h-12 text-lg leading-[4.8rem]'))}`}>{value || valuePlaceholder}</span>
+        <button
+            className={`text-lg leading-[4.8rem] ${variants(containerStyles, props)}`}
+            value={value}
+            placeholder={valuePlaceholder}
+        >
+            <span className={`block px-5 ${variants(textStyles, props)}`}>{value || valuePlaceholder}</span>
         </button>
     );
 }
@@ -24,3 +60,8 @@ Button.defaultProps = {
     value: '',
     valuePlaceholder: 'Add button text'
 };
+
+function variants() {
+
+    return '';
+}
