@@ -1,12 +1,41 @@
 import React from 'react';
 
+const useInputSelection = ({value}) => {
+    const [ref, setRef] = React.useState(null);
+    const [selectionStart, setSelectionStart] = React.useState(0);
+    const [selectionEnd, setSelectionEnd] = React.useState(0);
+
+    function saveSelectionRange(e) {
+        setSelectionStart(e.target.selectionStart);
+        setSelectionEnd(e.target.selectionEnd);
+    }
+
+    React.useEffect(() => {
+        if (!ref) {
+            return;
+        }
+
+        ref.selectionStart = selectionStart;
+        ref.selectionEnd = selectionEnd;
+    }, [ref, selectionEnd, selectionStart, value]);
+
+    return {
+        saveSelectionRange,
+        setRef
+    };
+};
+
 function CaptionInput({value, placeholder, onChange, readOnly, dataTestId}) {
+    const {setRef, saveSelectionRange} = useInputSelection({value});
+
     const handleOnChange = (e) => {
+        saveSelectionRange(e);
         onChange(e.target.value);
     };
 
     return (
         <input
+            ref={setRef}
             onChange={handleOnChange}
             className="not-kg-prose w-full px-9 text-center font-sans text-sm font-normal leading-8 tracking-wide text-grey-900"
             placeholder={placeholder}
